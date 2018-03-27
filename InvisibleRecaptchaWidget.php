@@ -12,7 +12,7 @@ use yii\widgets\InputWidget;
 
 
 /**
- *
+ * @see README.md
  * @author Pavel Bariev <bariew@yandex.ru>
  */
 class InvisibleRecaptchaWidget extends InputWidget

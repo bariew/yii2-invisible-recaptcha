@@ -50,7 +50,7 @@ Usage
         ];
     }
 ```
-3. Use widget instead ActiiveForm submit button in your view:
+3. Use widget instead of ActiveForm submit button in your view:
 ```
     <?= $form->field($model, 'verifyCode')->widget(\bariew\invisibleRecaptcha\InvisibleRecaptchaWidget::className(), [
         'buttonText' => 'Save' ,

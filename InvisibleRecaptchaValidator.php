@@ -13,6 +13,7 @@ use yii\validators\Validator;
 
 
 /**
+ * @see README.md
  * @author Pavel Bariev <bariew@yandex.ru>
  */
 class InvisibleRecaptchaValidator extends Validator

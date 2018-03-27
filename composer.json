@@ -2,7 +2,7 @@
     "name": "bariew/yii2-invisible-recaptcha",
     "description": "Validates form post with Goolge Invisible Recaptcha",
     "type": "yii2-extension",
-    "keywords": ["yii2","extension","validation"],
+    "keywords": ["yii2","extension","validation","recaptcha"],
     "license": "BSD-3-Clause",
     "authors": [
         {
