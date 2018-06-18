@@ -8,6 +8,7 @@
 namespace bariew\invisibleRecaptcha;
 
 use yii\helpers\Html;
+use yii\web\View;
 use yii\widgets\InputWidget;
 
 
@@ -27,26 +28,29 @@ class InvisibleRecaptchaWidget extends InputWidget
      */
     public function run()
     {
-        $this->getView()->registerJsFile('https://www.google.com/recaptcha/api.js');
+        $this->getView()->registerJsFile('https://www.google.com/recaptcha/api.js', [
+            'async' => 'async',
+            'defer' => 'defer'
+        ]);
         $this->field->template = "{input}\n{error}";
         $callbackRandomString = time();
         $formId = $this->field->form->id;
         $inputId = Html::getInputId($this->model, $this->attribute);
         $recaptchaId = InvisibleRecaptchaValidator::POST_PARAM;
-        $this->getView()->registerJs(<<<JS
+        $options = array_merge([
+            'data-sitekey'  => InvisibleRecaptchaValidator::key(),
+            'data-callback' => "recaptchaCallback_{$callbackRandomString}"
+        ], $this->options);
+        Html::addCssClass($options, 'g-recaptcha recaptcha');
+        return
+            Html::tag('script', <<<JS
             var recaptchaCallback_{$callbackRandomString} = function() {
                 $('#{$inputId}').val($('#{$recaptchaId}').val());
                 $('#{$formId}').submit();
             }
 JS
-        );
-        $options = array_merge([
-            'data-sitekey'  => InvisibleRecaptchaValidator::key(),
-            'data-callback' => 'recaptchaCallback_' . $callbackRandomString
-        ], $this->options);
-        Html::addCssClass($options, 'g-recaptcha recaptcha');
-        return
-            Html::activeHiddenInput($this->model, $this->attribute)
+            )
+            . Html::activeHiddenInput($this->model, $this->attribute)
             . Html::button($this->buttonText, $options);
     }
 }
