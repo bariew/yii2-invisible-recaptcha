@@ -8,7 +8,6 @@
 namespace bariew\invisibleRecaptcha;
 
 use yii\helpers\Html;
-use yii\web\View;
 use yii\widgets\InputWidget;
 
 
@@ -40,17 +39,18 @@ class InvisibleRecaptchaWidget extends InputWidget
         $options = array_merge([
             'data-sitekey'  => InvisibleRecaptchaValidator::key(),
             'data-callback' => "recaptchaCallback_{$callbackRandomString}"
-        ], $this->options);
+        ], $this->options, ['id' => 'recaptchaButton'.$callbackRandomString]);
         Html::addCssClass($options, 'g-recaptcha recaptcha');
-        return
-            Html::tag('script', <<<JS
-            var recaptchaCallback_{$callbackRandomString} = function() {
-                $('#{$inputId}').val($('#{$recaptchaId}').val());
-                $('#{$formId}').submit();
-            }
+        return Html::activeHiddenInput($this->model, $this->attribute)
+            . Html::button($this->buttonText, $options)
+            . Html::tag('script', <<<JS
+var recaptchaCallback_{$callbackRandomString} = function() {
+    $('#{$inputId}').val($('#{$recaptchaId}').val());
+    $('#{$formId}').submit();
+}
+grecaptcha.render('recaptchaButton{$callbackRandomString}'); // this helps to ajax form refresh
 JS
-            )
-            . Html::activeHiddenInput($this->model, $this->attribute)
-            . Html::button($this->buttonText, $options);
+            );
     }
 }
+
